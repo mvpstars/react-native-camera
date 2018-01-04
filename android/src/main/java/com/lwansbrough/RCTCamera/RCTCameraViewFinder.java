@@ -49,6 +49,9 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
     // concurrency lock for barcode scanner to avoid flooding the runtime
     public static volatile boolean barcodeScannerTaskLock = false;
 
+    // concurrency lock for native detector to avoid flooding the runtime
+    public static volatile boolean nativeDetectorTaskLock = false;
+
     // reader instance for the barcode scanner
     private final MultiFormatReader _multiFormatReader = new MultiFormatReader();
 
@@ -320,6 +323,10 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
         if (RCTCamera.getInstance().isBarcodeScannerEnabled() && !RCTCameraViewFinder.barcodeScannerTaskLock) {
             RCTCameraViewFinder.barcodeScannerTaskLock = true;
             new ReaderAsyncTask(camera, data).execute();
+        }
+        if (RCTCamera.getInstance().getNativeDetector() != null && !RCTCameraViewFinder.nativeDetectorTaskLock) {
+            RCTCameraViewFinder.nativeDetectorTaskLock = true;
+            RCTCamera.getInstance().getNativeDetector().process(camera, data);
         }
     }
 

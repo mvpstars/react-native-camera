@@ -18,6 +18,17 @@ public class RCTCameraViewManager extends ViewGroupManager<RCTCameraView> {
     public static final int COMMAND_STOP_PREVIEW = 1;
     public static final int COMMAND_START_PREVIEW = 2;
 
+    private final RCTNativeDetector _nativeDetector;
+
+    public RCTCameraViewManager(RCTNativeDetector nativeDetector) {
+        super();
+        _nativeDetector = nativeDetector;
+    }
+
+    public RCTCameraViewManager() {
+        this(null);
+    }
+
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -106,6 +117,11 @@ public class RCTCameraViewManager extends ViewGroupManager<RCTCameraView> {
     @ReactProp(name = "captureAudio")
     public void setCaptureAudio(RCTCameraView view, boolean captureAudio) {
         // TODO - implement video mode
+    }
+
+    @ReactProp(name = "nativeDetectorEnabled")
+    public void setNativeDetectorEnabled(RCTCameraView view, boolean nativeDetectorEnabled) {
+        view.setNativeDetector(nativeDetectorEnabled ? _nativeDetector : null);
     }
 
     @ReactProp(name = "barcodeScannerEnabled")

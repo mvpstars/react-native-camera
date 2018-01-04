@@ -16,6 +16,17 @@ import org.reactnative.facedetector.FaceDetectorModule;
 
 public class RCTCameraPackage implements ReactPackage {
 
+    private final RCTNativeDetector _nativeDetector;
+
+    public RCTCameraPackage(RCTNativeDetector nativeDetector) {
+        super();
+        _nativeDetector = nativeDetector;
+    }
+
+    public RCTCameraPackage() {
+        this(null);
+    }
+
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactApplicationContext) {
         return Arrays.<NativeModule>asList(
@@ -33,7 +44,7 @@ public class RCTCameraPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
         return Arrays.<ViewManager>asList(
-            new RCTCameraViewManager(),
+            new RCTCameraViewManager(_nativeDetector),
             new CameraViewManager()
         );
     }

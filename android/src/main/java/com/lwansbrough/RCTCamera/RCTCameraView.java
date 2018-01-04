@@ -128,6 +128,10 @@ public class RCTCameraView extends ViewGroup {
         }
     }
 
+    public void setNativeDetector(RCTNativeDetector nativeDetector) {
+        RCTCamera.getInstance().setNativeDetector(nativeDetector);
+    }
+
     public void setBarcodeScannerEnabled(boolean barcodeScannerEnabled) {
         RCTCamera.getInstance().setBarcodeScannerEnabled(barcodeScannerEnabled);
     }
