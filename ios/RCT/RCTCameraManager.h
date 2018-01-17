@@ -1,5 +1,7 @@
 #import <React/RCTViewManager.h>
 #import <AVFoundation/AVFoundation.h>
+#import <CoreML/CoreML.h>
+#import <Vision/Vision.h>
 
 @class RCTCamera;
 
@@ -57,27 +59,35 @@ typedef NS_ENUM(NSInteger, RCTCameraTorchMode) {
   RCTCameraTorchModeAuto = AVCaptureTorchModeAuto
 };
 
-@interface RCTCameraManager : RCTViewManager<AVCaptureMetadataOutputObjectsDelegate, AVCaptureFileOutputRecordingDelegate>
+@protocol VideoCaptureDelegate <NSObject>
+@required
+- (void)videoCapture:(NSObject * _Nonnull)capture didCaptureVideoFrame:(CVPixelBufferRef _Nullable)pixelBuffer timestamp:(CMTime)timestamp;
+@end
+
+@interface RCTCameraManager : RCTViewManager<AVCaptureMetadataOutputObjectsDelegate, AVCaptureFileOutputRecordingDelegate, AVCaptureVideoDataOutputSampleBufferDelegate>
 
 @property (nonatomic, strong) dispatch_queue_t sessionQueue;
 @property (nonatomic, strong) AVCaptureSession *session;
 @property (nonatomic, strong) AVCaptureDeviceInput *audioCaptureDeviceInput;
 @property (nonatomic, strong) AVCaptureDeviceInput *videoCaptureDeviceInput;
 @property (nonatomic, strong) AVCaptureStillImageOutput *stillImageOutput;
-@property (nonatomic, strong) AVCaptureMovieFileOutput *movieFileOutput;
-@property (nonatomic, strong) AVCaptureMetadataOutput *metadataOutput;
+//@property (nonatomic, strong) AVCaptureMovieFileOutput *movieFileOutput;
+@property (nonatomic, strong) AVCaptureVideoDataOutput *bufferImageOutput;
+//@property (nonatomic, strong) AVCaptureMetadataOutput *metadataOutput;
 @property (nonatomic, strong) id runtimeErrorHandlingObserver;
 @property (nonatomic, assign) NSInteger presetCamera;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @property (nonatomic, assign) NSInteger videoTarget;
 @property (nonatomic, assign) NSInteger orientation;
 @property (nonatomic, assign) BOOL mirrorImage;
-@property (nonatomic, assign) BOOL cropToPreview;
 @property (nonatomic, strong) NSArray* barCodeTypes;
 @property (nonatomic, strong) RCTPromiseResolveBlock videoResolve;
 @property (nonatomic, strong) RCTPromiseRejectBlock videoReject;
 @property (nonatomic, strong) RCTCamera *camera;
-
+@property (nonatomic, assign) BOOL cropToViewport;
+@property (nonatomic, assign) CMTime lastTimestamp;
+@property (nonatomic, assign) NSInteger maxDesiredFps;
+@property (nonatomic, strong) NSObject <VideoCaptureDelegate>*delegate;
 
 - (void)changeOrientation:(NSInteger)orientation;
 - (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position;
