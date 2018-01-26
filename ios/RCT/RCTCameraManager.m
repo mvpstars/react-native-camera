@@ -173,10 +173,6 @@ RCT_CUSTOM_VIEW_PROPERTY(captureQuality, NSInteger, RCTCamera) {
     case RCTCameraCaptureSessionPreset480p:
       qualityString = AVCaptureSessionPreset640x480;
       break;
-    case RCTCameraCaptureSessionPresetPreview:
-      qualityString = AVCaptureSessionPresetPhoto;
-      self.cropToViewport = true;
-      break;
   }
 
   [self setCaptureQuality:qualityString];
@@ -304,6 +300,10 @@ RCT_CUSTOM_VIEW_PROPERTY(keepAwake, BOOL, RCTCamera) {
 
 RCT_CUSTOM_VIEW_PROPERTY(mirrorImage, BOOL, RCTCamera) {
   self.mirrorImage = [RCTConvert BOOL:json];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(cropToPreview, BOOL, RCTCamera) {
+    self.cropToPreview = [RCTConvert BOOL:json];
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(barCodeTypes, NSArray, RCTCamera) {
