@@ -200,13 +200,12 @@ public class Inference: NSObject, VideoCaptureDelegate {
             }
             // send boundingBoxes to reactNative
             // FIXME: call react bridge
-            self.bridge.eventDispatcher().sendDeviceEvent(withName: "Recognitions", body: predictionsArray)
+            self.bridge.eventDispatcher().sendDeviceEvent(withName: "CameraDetection", body: predictionsArray)
             previousPredictionsArray = predictionsArray
         }
     }
     
     @objc public func videoCapture(_ capture: NSObject, didCaptureVideoFrame pixelBuffer: CVPixelBuffer?, timestamp: CMTime) {
-        print("\n\n\n PREDICTION IS INIT\n\n")
         
         // For debugging.
         //predict(image: UIImage(named: "dog416")!); return
