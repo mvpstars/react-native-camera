@@ -20,7 +20,7 @@
 		C562A123201B38B3007AD12E /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C562A11A201B38B3007AD12E /* UIImage+CVPixelBuffer.swift */; };
 		C562A124201B38B3007AD12E /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C562A11B201B38B3007AD12E /* YOLO.swift */; };
 		C562A125201B38B3007AD12E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C562A11C201B38B3007AD12E /* Extensions.swift */; };
-		C562A126201B38B3007AD12E /* TinyYOLO.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C562A11D201B38B3007AD12E /* TinyYOLO.mlmodel */; };
+		C562A185201B6242007AD12E /* TinyYOLO.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C562A184201B6242007AD12E /* TinyYOLO.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,7 +56,7 @@
 		C562A11A201B38B3007AD12E /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = SOURCE_ROOT; };
 		C562A11B201B38B3007AD12E /* YOLO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YOLO.swift; sourceTree = SOURCE_ROOT; };
 		C562A11C201B38B3007AD12E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = SOURCE_ROOT; };
-		C562A11D201B38B3007AD12E /* TinyYOLO.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLO.mlmodel; sourceTree = SOURCE_ROOT; };
+		C562A184201B6242007AD12E /* TinyYOLO.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLO.mlmodel; sourceTree = SOURCE_ROOT; };
 		C5A6779F200D0C3E0063D3E6 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 		C5A677A1200D0C480063D3E6 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -75,12 +75,12 @@
 		410701241ACB719800C6AA39 /* RCT */ = {
 			isa = PBXGroup;
 			children = (
+				C562A184201B6242007AD12E /* TinyYOLO.mlmodel */,
 				C562A115201B38B2007AD12E /* BoundingBox.swift */,
 				C562A116201B38B2007AD12E /* CVPixelBuffer+Helpers.swift */,
 				C562A11C201B38B3007AD12E /* Extensions.swift */,
 				C562A119201B38B2007AD12E /* Inference.swift */,
 				C562A118201B38B2007AD12E /* RCTCamera-Bridging-Header.h */,
-				C562A11D201B38B3007AD12E /* TinyYOLO.mlmodel */,
 				C562A11A201B38B3007AD12E /* UIImage+CVPixelBuffer.swift */,
 				C562A114201B38B1007AD12E /* Helpers.swift */,
 				C562A117201B38B2007AD12E /* Util.swift */,
@@ -183,11 +183,11 @@
 				C562A123201B38B3007AD12E /* UIImage+CVPixelBuffer.swift in Sources */,
 				C562A125201B38B3007AD12E /* Extensions.swift in Sources */,
 				C562A122201B38B3007AD12E /* Inference.swift in Sources */,
+				C562A185201B6242007AD12E /* TinyYOLO.mlmodel in Sources */,
 				C562A120201B38B3007AD12E /* CVPixelBuffer+Helpers.swift in Sources */,
 				C562A11F201B38B3007AD12E /* BoundingBox.swift in Sources */,
 				9FE592B31CA3CBF500788287 /* RCTSensorOrientationChecker.m in Sources */,
 				C562A11E201B38B3007AD12E /* Helpers.swift in Sources */,
-				C562A126201B38B3007AD12E /* TinyYOLO.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
