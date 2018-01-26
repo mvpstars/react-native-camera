@@ -895,12 +895,9 @@ RCT_EXPORT_METHOD(setZoom:(CGFloat)zoomFactor) {
     if (CMTIME_COMPARE_INLINE(deltaTime, >=, CMTimeMake(1, self.maxDesiredFps))) {
         self.lastTimestamp = timestamp;
         CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        [self.delegate  videoCapture:self didCaptureVideoFrame:imageBuffer timestamp:timestamp];
-//
         if( self.delegate != nil) {
-            NSLog(@" delegate is not nil\n\n");
+            [self.delegate  videoCapture:self didCaptureVideoFrame:imageBuffer timestamp:timestamp];
         }
-        
     }
 }
 
