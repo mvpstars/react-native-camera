@@ -4,7 +4,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.util.Base64;
 import android.util.Log;
 
@@ -16,6 +16,8 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.facebook.react.bridge.ReadableMap;
+
+import org.reactnative.camera.RNCameraViewHelper;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -156,14 +158,7 @@ public class MutableImage {
     }
 
     private static Bitmap toBitmap(byte[] data) {
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-            Bitmap photo = BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-            return photo;
-        } catch (IOException e) {
-            throw new IllegalStateException("Will not happen", e);
-        }
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
     }
 
     public String toBase64(int jpegQualityPercent) {
@@ -171,36 +166,41 @@ public class MutableImage {
     }
 
     public void writeDataToFile(File file, ReadableMap options, int jpegQualityPercent) throws IOException {
+        ByteArrayOutputStream baos = toJpegStream(currentRepresentation, jpegQualityPercent);
         FileOutputStream fos = new FileOutputStream(file);
-        fos.write(toJpeg(currentRepresentation, jpegQualityPercent));
+        baos.writeTo(fos);
         fos.close();
+        baos.close();
 
         try {
             ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(originalImageData);
+            ExifInterface original = new ExifInterface(inputStream);
+            for (String[] tagInfo: RNCameraViewHelper.exifTags) {
+                String name = tagInfo[1];
+                exif.setAttribute(name, original.getAttribute(name));
+            }
 
             // copy original exif data to the output exif...
             // unfortunately, this Android ExifInterface class doesn't understand all the tags so we lose some
-            for (Directory directory : originalImageMetaData().getDirectories()) {
-                for (Tag tag : directory.getTags()) {
-                    int tagType = tag.getTagType();
-                    Object object = directory.getObject(tagType);
-                    exif.setAttribute(tag.getTagName(), object.toString());
-                }
-            }
+//            for (Directory directory : originalImageMetaData().getDirectories()) {
+//                for (Tag tag : directory.getTags()) {
+//                    int tagType = tag.getTagType();
+//                    Object object = directory.getObject(tagType);
+//                    exif.setAttribute(tag.getTagName(), object.toString());
+//                }
+//            }
 
             writeLocationExifData(options, exif);
 
             if(hasBeenReoriented)
-                rewriteOrientation(exif);
+                exif.resetOrientation();
 
             exif.saveAttributes();
-        } catch (ImageProcessingException  | IOException e) {
+            inputStream.close();
+        } catch (IOException e) {
             Log.e(TAG, "failed to save exif data", e);
         }
-    }
-
-    private void rewriteOrientation(ExifInterface exif) {
-        exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
     }
 
     private void writeLocationExifData(ReadableMap options, ExifInterface exif) {
@@ -236,10 +236,14 @@ public class MutableImage {
         return originalImageMetaData;
     }
 
-    private static byte[] toJpeg(Bitmap bitmap, int quality) throws OutOfMemoryError {
+    private static ByteArrayOutputStream toJpegStream(Bitmap bitmap, int quality) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+        return outputStream;
+    }
 
+    private static byte[] toJpeg(Bitmap bitmap, int quality) throws OutOfMemoryError {
+        ByteArrayOutputStream outputStream = toJpegStream(bitmap, quality);
         try {
             return outputStream.toByteArray();
         } finally {
